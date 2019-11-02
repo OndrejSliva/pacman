@@ -46,10 +46,6 @@ public class GameScreen extends SurfaceView {
         this.level.draw(canvas);
     }
 
-    public void drawFirst(Canvas canvas) {
-        this.level.drawFirst(canvas);
-    }
-
     public void setPlayerDirection(int direction) {
         this.level.setPlayerDirection(direction);
     }
