@@ -23,6 +23,6 @@ public class Wall implements IDrawable{
     }
 
     public boolean colides(Rect rect) {
-        return this.rect.intersect(rect);
+        return this.rect.left < rect.right && rect.left < this.rect.right && this.rect.top < rect.bottom && rect.top < this.rect.bottom;
     }
 }

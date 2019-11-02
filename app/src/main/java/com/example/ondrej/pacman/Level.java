@@ -1,11 +1,7 @@
 package com.example.ondrej.pacman;
 
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,11 +99,11 @@ public class Level {
     }
 
     public void update() {
-        this.player.move();
+        this.player.update();
     }
 
-    public void setPlayerDirection(int direction) {
-        this.player.setDirection(direction);
+    public void setPlayerNextDirection(int direction) {
+        this.player.setNextDirection(direction);
     }
 
 }

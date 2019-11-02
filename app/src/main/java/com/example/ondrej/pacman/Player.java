@@ -3,10 +3,7 @@ package com.example.ondrej.pacman;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
-
-import androidx.constraintlayout.solver.widgets.Rectangle;
 
 import java.util.List;
 
@@ -20,8 +17,10 @@ public class Player implements IDrawable {
     private Rect rectangle;
     private int color;
 
-    private int direction = DIRECTION_UP;
+    private int actualDirection = DIRECTION_UP;
+    private int nextDirection = DIRECTION_UP;
     private List<Wall> walls;
+    private int speed = 5;
 
     public Player (List<Wall> walls, int size) {
 
@@ -37,44 +36,94 @@ public class Player implements IDrawable {
         canvas.drawRect(rectangle, paint);
     }
 
-    public void setDirection(int direction) {
-        this.direction = direction;
+    public void setNextDirection(int nextDirection) {
+        this.nextDirection = nextDirection;
+        this.setActualDirectionToNextIfCanMoveThere();
+    }
+
+    private void setActualDirectionToNextIfCanMoveThere() {
+        if (this.canMoveToDirection(this.nextDirection)) {
+            this.actualDirection = this.nextDirection;
+        }
     }
 
     //@Override
     public void update() {
-        //TODO
+        this.setActualDirectionToNextIfCanMoveThere();
+        this.move();
     }
 
-    public void move() {
-        switch (this.direction) {
+    private void move() {
+        switch (this.actualDirection) {
             case DIRECTION_RIGHT:
-                if (canMove(rectangle.left + 5, rectangle.top)) {
-                    rectangle.left += 5;
-                    rectangle.right += 5;
+                if (canMoveRight()) {
+                    rectangle.left += this.speed;
+                    rectangle.right += this.speed;
                 }
                 break;
             case DIRECTION_LEFT:
-                if (canMove(rectangle.left - 5, rectangle.top)) {
-                    rectangle.left -= 5;
-                    rectangle.right -= 5;
+                if (canMoveLeft()) {
+                    rectangle.left -= this.speed;
+                    rectangle.right -= this.speed;
                 }
                 break;
             case DIRECTION_UP:
-                if (canMove(rectangle.left,rectangle.top - 5)) {
-                    rectangle.top -= 5;
-                    rectangle.bottom -= 5;
+                if (canMoveUp()) {
+                    rectangle.top -= this.speed;
+                    rectangle.bottom -= this.speed;
                 }
                 break;
             case DIRECTION_DOWN:
-                if (canMove(rectangle.left,rectangle.top + 5)) {
-                    rectangle.top += 5;
-                    rectangle.bottom += 5;
+                if (canMoveDown()) {
+                    rectangle.top += this.speed;
+                    rectangle.bottom += this.speed;
                 }
                 break;
             default:
                 break;
         }
+    }
+
+    private boolean canMoveRight() {
+        return canMove(rectangle.left + this.speed, rectangle.top);
+    }
+
+    private boolean canMoveLeft() {
+        return canMove(rectangle.left - this.speed, rectangle.top);
+    }
+
+    private boolean canMoveUp() {
+        return canMove(rectangle.left,rectangle.top - this.speed);
+    }
+
+    private boolean canMoveDown() {
+        return canMove(rectangle.left,rectangle.top + this.speed);
+    }
+
+    private boolean canMoveToDirection(int direction) {
+        switch (direction) {
+            case DIRECTION_RIGHT:
+                return canMoveRight();
+            case DIRECTION_LEFT:
+                return canMoveLeft();
+            case DIRECTION_UP:
+                return canMoveUp();
+            case DIRECTION_DOWN:
+                return canMoveDown();
+            default:
+                return false;
+        }
+    }
+
+    private boolean isOnCross() {
+        int directionsAvaibleForMove = 0;
+
+        if (canMoveLeft()) directionsAvaibleForMove++;
+        if (canMoveRight()) directionsAvaibleForMove++;
+        if (canMoveUp()) directionsAvaibleForMove++;
+        if (canMoveDown()) directionsAvaibleForMove++;
+
+        return directionsAvaibleForMove > 2;
     }
 
     private boolean canMove(int nextX, int nextY) {

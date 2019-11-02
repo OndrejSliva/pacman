@@ -47,6 +47,6 @@ public class GameScreen extends SurfaceView {
     }
 
     public void setPlayerDirection(int direction) {
-        this.level.setPlayerDirection(direction);
+        this.level.setPlayerNextDirection(direction);
     }
 }
