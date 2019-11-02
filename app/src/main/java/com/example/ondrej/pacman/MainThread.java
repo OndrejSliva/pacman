@@ -31,6 +31,24 @@ public class MainThread extends Thread {
         long totalTime = 0;
         long targetTime = 1000/MAX_FPS;
 
+        try {
+            canvas = this.surfaceHolder.lockCanvas();
+            synchronized (surfaceHolder) {
+                this.gamePanel.drawFirst(canvas);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (canvas != null) {
+                try {
+                    surfaceHolder.unlockCanvasAndPost(canvas);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
         while (running) {
             starTime = System.nanoTime();
 

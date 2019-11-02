@@ -1,7 +1,9 @@
 package com.example.ondrej.pacman;
 
 import android.app.Activity;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,8 +20,14 @@ public class MainActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.game_with_buttons_layout);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point p = new Point();
+        display.getSize(p);
+        int width = p.x;
+        int height = p.y;
+
         LinearLayout canvasLayout = (LinearLayout) findViewById(R.id.canvas_layout);
-        gameScreen = new GameScreen(this);
+        gameScreen = new GameScreen(this, width, height);
         canvasLayout.addView(gameScreen);
 
         this.initMoveButtons();
