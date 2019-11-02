@@ -52,10 +52,11 @@ public class Level {
         Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
 
         int tileSize = this.width / bitmap.getWidth();*/
-        int tileSize = this.width / 20;
+        //int tileSize = this.width / 20;
+        int tileSize = 50;
 
         ConstantHelper.TILE_SIZE = tileSize;
-        this.player = new Player(tileSize);
+        this.player = new Player(walls, tileSize);
 
         for (int x = 0; x < 20; x++) {
             for (int y = 0; y < 15; y++) {

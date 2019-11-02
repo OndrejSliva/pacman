@@ -21,4 +21,8 @@ public class Wall implements IDrawable{
     public void draw(Canvas canvas) {
         canvas.drawRect(this.rect, paint);
     }
+
+    public boolean colides(Rect rect) {
+        return this.rect.intersect(rect);
+    }
 }
