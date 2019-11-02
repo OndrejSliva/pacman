@@ -1,6 +1,8 @@
 package com.example.ondrej.pacman;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
@@ -52,8 +54,15 @@ public class Level {
         //int tileSize = this.width / 20;
         int tileSize = 50;
 
+        //todo vyzkoušet resize i na mapu
+        Bitmap pacmanOpen = BitmapFactory.decodeResource(resources, R.drawable.pacman_open);
+        Bitmap pacmanOpenResized = Bitmap.createScaledBitmap(pacmanOpen, tileSize, tileSize, false);
+        Bitmap pacmanClose = BitmapFactory.decodeResource(resources, R.drawable.pacman_close);
+        Bitmap pacmanCloseResized = Bitmap.createScaledBitmap(pacmanClose, tileSize, tileSize, false);
+
+
         ConstantHelper.TILE_SIZE = tileSize;
-        this.player = new Player(walls, tileSize);
+        this.player = new Player(walls, tileSize, pacmanOpenResized, pacmanCloseResized);
 
         for (int x = 0; x < 20; x++) {
             for (int y = 0; y < 15; y++) {
