@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-public class Wall implements IDrawable{
+public class Wall implements IDrawable, IColidable {
 
     private Rect rect;
     private Paint paint;

@@ -2,6 +2,7 @@ package com.example.ondrej.pacman;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +101,17 @@ public class Level {
 
     public void update() {
         this.player.update();
+        this.checkFoodCollision();
+    }
+
+    public void checkFoodCollision() {
+        Rect playerRectangle = this.player.getRectangle();
+        for (int i = 0; i < this.foods.size(); i++) {
+            if (this.foods.get(i).colides(playerRectangle)) {
+                this.foods.remove(i);
+                break;
+            }
+        }
     }
 
     public void setPlayerNextDirection(int direction) {

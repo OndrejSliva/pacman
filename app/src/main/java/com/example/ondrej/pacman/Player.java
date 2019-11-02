@@ -142,5 +142,7 @@ public class Player implements IDrawable {
         this.rectangle.set(x, y, x+ConstantHelper.TILE_SIZE, y+ConstantHelper.TILE_SIZE);
     }
 
-
+    public Rect getRectangle() {
+        return this.rectangle;
+    }
 }

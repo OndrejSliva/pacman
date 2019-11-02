@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-public class Food implements IDrawable {
+public class Food implements IDrawable, IColidable {
 
     private Rect rectangle;
     private Paint paint;
@@ -23,5 +23,10 @@ public class Food implements IDrawable {
     @Override
     public void draw(Canvas canvas) {
         canvas.drawRect(this.rectangle, this.paint);
+    }
+
+    @Override
+    public boolean colides(Rect rect) {
+        return this.rectangle.left < rect.right && rect.left < this.rectangle.right && this.rectangle.top < rect.bottom && rect.top < this.rectangle.bottom;
     }
 }
