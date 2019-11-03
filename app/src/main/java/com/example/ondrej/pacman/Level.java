@@ -7,16 +7,15 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Level {
 
     private int [][] map = new int[][]{
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
         {1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1},
         {1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1},
         {1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1},
         {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1},
@@ -24,9 +23,9 @@ public class Level {
         {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1},
         {1, 0, 1, 0, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1},
         {1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1},
         {1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     };
 
@@ -44,29 +43,6 @@ public class Level {
         this.walls = new ArrayList<>();
         this.foods = new ArrayList<>();
         this.initLevel();
-    }
-
-    private int[] getSpeeds(int tileSize) {
-        int[] speeds = new int[10];
-        int basicSpeed = tileSize / 10;
-        Arrays.fill(speeds, basicSpeed);
-        if (tileSize%10 == 0) {
-            return speeds;
-        }
-        int sum = 0;
-        for (int speed : speeds) {
-            sum += speed;
-        }
-        int[] indexes = new int[]{0, 5, 7, 2, 9, 4, 8, 3, 6, 1};
-        for (int index : indexes) {
-            speeds[index] += 1;
-            sum += 1;
-            if (sum == tileSize) {
-                return speeds;
-            }
-        }
-
-        return speeds;
     }
 
     public void initLevel() {
@@ -88,7 +64,7 @@ public class Level {
 
 
         ConstantHelper.TILE_SIZE = tileSize;
-        this.player = new Player(walls, tileSize, pacmanOpenResized, pacmanCloseResized, getSpeeds(tileSize));
+        this.player = new Player(walls, tileSize, pacmanOpenResized, pacmanCloseResized);
 
         for (int x = 0; x < 20; x++) {
             for (int y = 0; y < 15; y++) {
@@ -98,6 +74,8 @@ public class Level {
                     this.walls.add(new Wall(x*ConstantHelper.TILE_SIZE, y*ConstantHelper.TILE_SIZE));
                 } else if (val == 2){ //player
                     this.player.setPosition(x * ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE);
+                } else if (val == 3) {
+                    this.foods.add(new Food(x*ConstantHelper.TILE_SIZE, y*ConstantHelper.TILE_SIZE));
                 } else {
                     this.foods.add(new Food(x*ConstantHelper.TILE_SIZE, y*ConstantHelper.TILE_SIZE));
                 }
@@ -139,7 +117,7 @@ public class Level {
         this.checkFoodCollision();
     }
 
-    public void checkFoodCollision() {
+    private void checkFoodCollision() {
         Rect playerRectangle = this.player.getRectangle();
         for (int i = 0; i < this.foods.size(); i++) {
             if (this.foods.get(i).colides(playerRectangle)) {
