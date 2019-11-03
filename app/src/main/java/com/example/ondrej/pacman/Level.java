@@ -112,8 +112,6 @@ public class Level {
     }
 
     public void draw(Canvas canvas) {
-        //pozadí plátna
-        //canvas.drawColor(Color.BLACK);
         for (Food food : foods) {
             food.draw(canvas);
         }
@@ -130,6 +128,9 @@ public class Level {
     public void update() {
         this.player.update();
         this.checkFoodCollision();
+        for (Enemy enemy : enemies) {
+            enemy.update();
+        }
     }
 
     private void checkFoodCollision() {

@@ -81,17 +81,6 @@ public class Player extends Character {
         }
     }
 
-    private boolean isOnCross() {
-        int directionsAvaibleForMove = 0;
-
-        if (canMoveLeft()) directionsAvaibleForMove++;
-        if (canMoveRight()) directionsAvaibleForMove++;
-        if (canMoveUp()) directionsAvaibleForMove++;
-        if (canMoveDown()) directionsAvaibleForMove++;
-
-        return directionsAvaibleForMove > 2;
-    }
-
     public Rect getRectangle() {
         return this.rectangle;
     }

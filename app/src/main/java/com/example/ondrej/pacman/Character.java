@@ -65,6 +65,10 @@ abstract public class Character implements IDrawable {
         }
     }
 
+    protected boolean canMoveToActualDirection() {
+        return canMoveToDirection(this.actualDirection);
+    }
+
     private boolean canMove(int nextX, int nextY) {
         Rect nextPositionRectangle = new Rect(nextX, nextY, nextX + ConstantHelper.TILE_SIZE, nextY + ConstantHelper.TILE_SIZE);
 
