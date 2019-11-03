@@ -36,12 +36,15 @@ public class Level {
     private int heigth;
     private List<Food> foods;
 
+    private List<Enemy> enemies;
+
     public Level(Resources resources, int width, int heigth) {
         this.width = width;
         this.heigth = heigth;
         this.resources = resources;
         this.walls = new ArrayList<>();
         this.foods = new ArrayList<>();
+        this.enemies = new ArrayList<>();
         this.initLevel();
     }
 
@@ -61,7 +64,15 @@ public class Level {
         Bitmap pacmanOpenResized = Bitmap.createScaledBitmap(pacmanOpen, tileSize, tileSize, false);
         Bitmap pacmanClose = BitmapFactory.decodeResource(resources, R.drawable.pacman_close);
         Bitmap pacmanCloseResized = Bitmap.createScaledBitmap(pacmanClose, tileSize, tileSize, false);
-
+        Bitmap enemyRed = BitmapFactory.decodeResource(resources, R.drawable.enemy_red);
+        Bitmap enemyRedResized = Bitmap.createScaledBitmap(enemyRed, tileSize, tileSize, false);
+        Bitmap enemyBlue = BitmapFactory.decodeResource(resources, R.drawable.enemy_blue);
+        Bitmap enemyBlueResized = Bitmap.createScaledBitmap(enemyBlue, tileSize, tileSize, false);
+        Bitmap enemyYellow = BitmapFactory.decodeResource(resources, R.drawable.enemy_yellow);
+        Bitmap enemyYellowResized = Bitmap.createScaledBitmap(enemyYellow, tileSize, tileSize, false);
+        Bitmap enemyPurple = BitmapFactory.decodeResource(resources, R.drawable.enemy_purple);
+        Bitmap enemyPurpleResized = Bitmap.createScaledBitmap(enemyPurple, tileSize, tileSize, false);
+        Bitmap enemiesBitmap[] = new Bitmap[]{enemyRedResized, enemyBlueResized, enemyYellowResized, enemyPurpleResized};
 
         ConstantHelper.TILE_SIZE = tileSize;
         this.player = new Player(walls, tileSize, pacmanOpenResized, pacmanCloseResized);
@@ -71,10 +82,11 @@ public class Level {
                 int val = map[y][x];
 
                 if(val == 1){  //tile
-                    this.walls.add(new Wall(x*ConstantHelper.TILE_SIZE, y*ConstantHelper.TILE_SIZE));
+                    this.walls.add(new Wall(x*ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE));
                 } else if (val == 2){ //player
                     this.player.setPosition(x * ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE);
                 } else if (val == 3) {
+                    this.enemies.add(new Enemy(tileSize, walls, enemiesBitmap[this.enemies.size() % 4], x * ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE));
                     this.foods.add(new Food(x*ConstantHelper.TILE_SIZE, y*ConstantHelper.TILE_SIZE));
                 } else {
                     this.foods.add(new Food(x*ConstantHelper.TILE_SIZE, y*ConstantHelper.TILE_SIZE));
@@ -102,11 +114,14 @@ public class Level {
     public void draw(Canvas canvas) {
         //pozadí plátna
         //canvas.drawColor(Color.BLACK);
-        for (Food f: foods) {
-            f.draw(canvas);
+        for (Food food : foods) {
+            food.draw(canvas);
         }
-        for (Wall w: walls) {
-            w.draw(canvas);
+        for (Wall wall : walls) {
+            wall.draw(canvas);
+        }
+        for (Enemy enemy : enemies) {
+            enemy.draw(canvas);
         }
         player.draw(canvas);
         System.out.println();
