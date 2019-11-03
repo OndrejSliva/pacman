@@ -29,6 +29,8 @@ public class Player implements IDrawable {
     private int nextDirection = DIRECTION_UP;
     private List<Wall> walls;
     private int speed = 5;
+    private int[] speedInTime;
+    private int moveTime = 0;
 
     private Bitmap[] pacmanOpen;
     private Bitmap[] pacmanClose;
@@ -37,9 +39,10 @@ public class Player implements IDrawable {
     private boolean open = false;
     private int openCloseTimer = 0;
 
-    public Player (List<Wall> walls, int size, Bitmap pacmanOpen, Bitmap pacmanClose) {
+    public Player (List<Wall> walls, int size, Bitmap pacmanOpen, Bitmap pacmanClose, int[] speeds) {
 
 
+        this.speedInTime = speeds;
         this.rectangle = new Rect(0, 0, size, size);
         this.color = Color.YELLOW;
         this.walls = walls;
@@ -108,47 +111,53 @@ public class Player implements IDrawable {
         switch (this.actualDirection) {
             case DIRECTION_RIGHT:
                 if (canMoveRight()) {
-                    rectangle.left += this.speed;
-                    rectangle.right += this.speed;
+                    rectangle.left += this.speedInTime[this.moveTime];
+                    rectangle.right += this.speedInTime[this.moveTime];
+                    this.moveTime++;
                 }
                 break;
             case DIRECTION_LEFT:
                 if (canMoveLeft()) {
-                    rectangle.left -= this.speed;
-                    rectangle.right -= this.speed;
+                    rectangle.left -= this.speedInTime[this.moveTime];
+                    rectangle.right -= this.speedInTime[this.moveTime];
+                    this.moveTime++;
                 }
                 break;
             case DIRECTION_UP:
                 if (canMoveUp()) {
-                    rectangle.top -= this.speed;
-                    rectangle.bottom -= this.speed;
+                    rectangle.top -= this.speedInTime[this.moveTime];
+                    rectangle.bottom -= this.speedInTime[this.moveTime];
+                    this.moveTime++;
                 }
                 break;
             case DIRECTION_DOWN:
                 if (canMoveDown()) {
-                    rectangle.top += this.speed;
-                    rectangle.bottom += this.speed;
+                    rectangle.top += this.speedInTime[this.moveTime];
+                    rectangle.bottom += this.speedInTime[this.moveTime];
+                    this.moveTime++;
                 }
                 break;
             default:
                 break;
         }
+
+        this.moveTime = this.moveTime%10;
     }
 
     private boolean canMoveRight() {
-        return canMove(rectangle.left + this.speed, rectangle.top);
+        return canMove(rectangle.left + this.speedInTime[this.moveTime], rectangle.top);
     }
 
     private boolean canMoveLeft() {
-        return canMove(rectangle.left - this.speed, rectangle.top);
+        return canMove(rectangle.left - this.speedInTime[this.moveTime], rectangle.top);
     }
 
     private boolean canMoveUp() {
-        return canMove(rectangle.left,rectangle.top - this.speed);
+        return canMove(rectangle.left,rectangle.top - this.speedInTime[this.moveTime]);
     }
 
     private boolean canMoveDown() {
-        return canMove(rectangle.left,rectangle.top + this.speed);
+        return canMove(rectangle.left,rectangle.top + this.speedInTime[this.moveTime]);
     }
 
     private boolean canMoveToDirection(int direction) {

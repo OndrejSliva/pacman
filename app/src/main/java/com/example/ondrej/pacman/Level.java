@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Level {
@@ -43,16 +44,41 @@ public class Level {
         this.walls = new ArrayList<>();
         this.foods = new ArrayList<>();
         this.initLevel();
+    }
 
+    private int[] getSpeeds(int tileSize) {
+        int[] speeds = new int[10];
+        int basicSpeed = tileSize / 10;
+        Arrays.fill(speeds, basicSpeed);
+        if (tileSize%10 == 0) {
+            return speeds;
+        }
+        int sum = 0;
+        for (int speed : speeds) {
+            sum += speed;
+        }
+        int[] indexes = new int[]{0, 5, 7, 2, 9, 4, 8, 3, 6, 1};
+        for (int index : indexes) {
+            speeds[index] += 1;
+            sum += 1;
+            if (sum == tileSize) {
+                return speeds;
+            }
+        }
+
+        return speeds;
     }
 
     public void initLevel() {
-        /*Drawable d = resources.getDrawable(R.drawable.map);
-        Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
-
-        int tileSize = this.width / bitmap.getWidth();*/
         //int tileSize = this.width / 20;
-        int tileSize = 50;
+        /*Drawable d = resources.getDrawable(R.drawable.map);
+        Bitmap bitmap = ((BitmapDrawable)d).getBitmap();*/
+        Bitmap mapBitmap = BitmapFactory.decodeResource(resources, R.drawable.map);
+        Bitmap mapResized = Bitmap.createScaledBitmap(mapBitmap, 20, 15, false);
+
+
+        int tileSize = this.width / mapResized.getWidth();
+        //int tileSize = 50;
 
         //todo vyzkoušet resize i na mapu
         Bitmap pacmanOpen = BitmapFactory.decodeResource(resources, R.drawable.pacman_open);
@@ -62,7 +88,7 @@ public class Level {
 
 
         ConstantHelper.TILE_SIZE = tileSize;
-        this.player = new Player(walls, tileSize, pacmanOpenResized, pacmanCloseResized);
+        this.player = new Player(walls, tileSize, pacmanOpenResized, pacmanCloseResized, getSpeeds(tileSize));
 
         for (int x = 0; x < 20; x++) {
             for (int y = 0; y < 15; y++) {
