@@ -17,7 +17,7 @@ abstract public class Character implements IDrawable {
 
     protected int[] speedInTime;
     protected int moveTime = 0;
-    protected boolean increment = true;
+    protected int decrementTime = 0;
 
     //obedlník na canvas
     protected Rect rectangle;
@@ -34,13 +34,13 @@ abstract public class Character implements IDrawable {
         this.rectangle.top = this.baseY = y;
         this.rectangle.bottom = this.rectangle.top + tileSize;
         this.rectangle.right = this.rectangle.left + tileSize;
-        int w = this.rectangle.width();
-        int h = this.rectangle.height();
         this.walls = walls;
         this.speedInTime = getSpeeds(tileSize);
     }
 
     public void setBasePosition() {
+        this.moveTime = 0;
+        this.decrementTime = 0;
         this.rectangle.set(this.baseX, this.baseY, this.baseX+ConstantHelper.TILE_SIZE, this.baseY+ConstantHelper.TILE_SIZE);
     }
 
@@ -152,16 +152,14 @@ abstract public class Character implements IDrawable {
                 break;
         }
 
-        //
-        if (this.increment) {
+        if (this.decrementTime == 0) {
             this.moveTime++;
         } else {
-            if (this.moveTime == 0) {
-                this.increment = true;
-                this.moveTime++;
-            } else {
-                this.moveTime--;
+            this.moveTime--;
+            if (this.moveTime == -1) {
+                this.moveTime = 0;
             }
+            this.decrementTime--;
         }
 
         this.moveTime = this.moveTime%10;

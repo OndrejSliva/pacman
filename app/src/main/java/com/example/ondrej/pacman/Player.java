@@ -67,10 +67,9 @@ public class Player extends Character {
     private void setActualDirectionToNextIfCanMoveThere() {
         if (this.canMoveToDirection(this.nextDirection)) {
             if (this.getOppositeDirection() == nextDirection) {
-                this.increment = !increment;
-                this.moveTime -= 1;
-                if (this.moveTime == -1) {
-                    this.moveTime = 9;
+                if (this.moveTime != 0) {
+                    this.decrementTime = this.moveTime;
+                    this.moveTime -= 1;
                 }
             }
             this.actualDirection = this.nextDirection;
