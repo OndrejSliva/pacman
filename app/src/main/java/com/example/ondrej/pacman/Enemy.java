@@ -16,12 +16,11 @@ public class Enemy extends Character {
     //poslední směr
     private int lastDirection;
 
+
     public Enemy(int tileSize, List<Wall> walls, Bitmap enemyBitmap, int x, int y) {
-        super(tileSize, walls);
+        super(tileSize, walls, x, y);
         this.randomGenerator = new Random();
         this.image = enemyBitmap;
-        this.rectangle.left = x;
-        this.rectangle.top = y;
     }
 
     @Override
@@ -54,29 +53,6 @@ public class Enemy extends Character {
         this.moveByActualDirection();
     }
 
-    private void moveByActualDirection(){
-        switch (this.actualDirection){
-            case Enemy.DIRECTION_RIGHT:
-                this.moveRight();
-                this.lastDirection = Enemy.DIRECTION_RIGHT;
-                break;
-            case Enemy.DIRECTION_LEFT:
-                this.moveLeft();
-                this.lastDirection = Enemy.DIRECTION_LEFT;
-                break;
-            case Enemy.DIRECTION_UP:
-                this.moveUp();
-                this.lastDirection = Enemy.DIRECTION_UP;
-                break;
-            case Enemy.DIRECTION_DOWN:
-                this.moveDown();
-                this.lastDirection = Enemy.DIRECTION_DOWN;
-                break;
-        }
-
-        this.moveTime = this.moveTime%10;
-    }
-
     private void setOtherDirectionOnCross(){
         int newDirection = -1;
         boolean canMoveThere = false;
@@ -86,20 +62,6 @@ public class Enemy extends Character {
             canMoveThere = this.canMoveToDirection(newDirection);
         }
         this.actualDirection = newDirection;
-    }
-
-    private int getOppositeDirection(){
-        switch (this.actualDirection){
-            case Enemy.DIRECTION_RIGHT:
-                return Enemy.DIRECTION_LEFT;
-            case Enemy.DIRECTION_LEFT:
-                return Enemy.DIRECTION_RIGHT;
-            case Enemy.DIRECTION_UP:
-                return Enemy.DIRECTION_DOWN;
-            case Enemy.DIRECTION_DOWN:
-                return Enemy.DIRECTION_UP;
-        }
-        return -1;
     }
 
     private void setOtherDirection(){

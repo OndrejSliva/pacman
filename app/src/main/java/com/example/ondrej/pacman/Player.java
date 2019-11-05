@@ -22,8 +22,8 @@ public class Player extends Character {
     private boolean open = false;
     private int openCloseTimer = 0;
 
-    public Player (List<Wall> walls, int size, Bitmap pacmanOpen, Bitmap pacmanClose) {
-        super(size, walls);
+    public Player (List<Wall> walls, int size, Bitmap pacmanOpen, Bitmap pacmanClose, int x, int y) {
+        super(size, walls, x, y);
         this.loadAllPacmanImages(pacmanOpen, pacmanClose);
     }
 
@@ -66,6 +66,13 @@ public class Player extends Character {
 
     private void setActualDirectionToNextIfCanMoveThere() {
         if (this.canMoveToDirection(this.nextDirection)) {
+            if (this.getOppositeDirection() == nextDirection) {
+                this.increment = !increment;
+                this.moveTime -= 1;
+                if (this.moveTime == -1) {
+                    this.moveTime = 9;
+                }
+            }
             this.actualDirection = this.nextDirection;
         }
     }
@@ -73,7 +80,7 @@ public class Player extends Character {
     //@Override
     public void update() {
         this.setActualDirectionToNextIfCanMoveThere();
-        this.move();
+        this.moveByActualDirection();
         //slows pacmans mouth open and close
         if(this.openCloseTimer++ == 15){
             this.open = !this.open;

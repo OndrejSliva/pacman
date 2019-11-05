@@ -17,6 +17,7 @@ abstract public class Character implements IDrawable {
 
     protected int[] speedInTime;
     protected int moveTime = 0;
+    protected boolean increment = true;
 
     //obedlník na canvas
     protected Rect rectangle;
@@ -24,14 +25,23 @@ abstract public class Character implements IDrawable {
     //zdi, abychom mohli řešit pohyb (kolize)
     protected List<Wall> walls;
 
-    public Character(int tileSize, List<Wall> walls) {
+    private int baseX;
+    private int baseY;
+
+    public Character(int tileSize, List<Wall> walls, int x, int y) {
         this.rectangle = new Rect(0, 0, tileSize, tileSize);
+        this.rectangle.left = this.baseX = x;
+        this.rectangle.top = this.baseY = y;
+        this.rectangle.bottom = this.rectangle.top + tileSize;
+        this.rectangle.right = this.rectangle.left + tileSize;
+        int w = this.rectangle.width();
+        int h = this.rectangle.height();
         this.walls = walls;
         this.speedInTime = getSpeeds(tileSize);
     }
 
-    public void setPosition(int x, int y) {
-        this.rectangle.set(x, y, x+ConstantHelper.TILE_SIZE, y+ConstantHelper.TILE_SIZE);
+    public void setBasePosition() {
+        this.rectangle.set(this.baseX, this.baseY, this.baseX+ConstantHelper.TILE_SIZE, this.baseY+ConstantHelper.TILE_SIZE);
     }
 
     protected boolean canMoveRight() {
@@ -107,28 +117,24 @@ abstract public class Character implements IDrawable {
     protected void moveRight() {
         rectangle.left += this.speedInTime[this.moveTime];
         rectangle.right += this.speedInTime[this.moveTime];
-        this.moveTime++;
     }
 
     protected void moveLeft() {
         rectangle.left -= this.speedInTime[this.moveTime];
         rectangle.right -= this.speedInTime[this.moveTime];
-        this.moveTime++;
     }
 
     protected void moveUp() {
         rectangle.top -= this.speedInTime[this.moveTime];
         rectangle.bottom -= this.speedInTime[this.moveTime];
-        this.moveTime++;
     }
 
     protected void moveDown() {
         rectangle.top += this.speedInTime[this.moveTime];
         rectangle.bottom += this.speedInTime[this.moveTime];
-        this.moveTime++;
     }
 
-    protected void move() {
+    protected void moveByActualDirection() {
         switch (this.actualDirection) {
             case DIRECTION_RIGHT:
                 if (canMoveRight()) { moveRight(); }
@@ -146,6 +152,32 @@ abstract public class Character implements IDrawable {
                 break;
         }
 
+        //
+        if (this.increment) {
+            this.moveTime++;
+        } else {
+            if (this.moveTime == 0) {
+                this.increment = true;
+                this.moveTime++;
+            } else {
+                this.moveTime--;
+            }
+        }
+
         this.moveTime = this.moveTime%10;
+    }
+
+    protected int getOppositeDirection(){
+        switch (this.actualDirection){
+            case Enemy.DIRECTION_RIGHT:
+                return Enemy.DIRECTION_LEFT;
+            case Enemy.DIRECTION_LEFT:
+                return Enemy.DIRECTION_RIGHT;
+            case Enemy.DIRECTION_UP:
+                return Enemy.DIRECTION_DOWN;
+            case Enemy.DIRECTION_DOWN:
+                return Enemy.DIRECTION_UP;
+        }
+        return -1;
     }
 }
