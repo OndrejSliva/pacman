@@ -15,8 +15,7 @@ public class GameScreen extends SurfaceView {
     public GameScreen(Context context, int width, int height) {
         super(context);
 
-        mainThread = new MainThread(getHolder(), this);
-
+        //mainThread = new MainThread(getHolder(), this);
         setFocusable(true);
         this.width = width;
         this.height = height;

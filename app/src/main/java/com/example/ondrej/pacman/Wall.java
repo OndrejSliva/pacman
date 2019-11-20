@@ -12,7 +12,7 @@ public class Wall implements IDrawable, IColidable {
     private Paint paint;
 
     public Wall(int x, int y){
-        this.rect = new Rect(x, y, x + ConstantHelper.TILE_SIZE, y + ConstantHelper.TILE_SIZE);
+        this.rect = new Rect(x, y + ConstantHelper.PANEL_SIZE, x + ConstantHelper.TILE_SIZE, y + ConstantHelper.TILE_SIZE + ConstantHelper.PANEL_SIZE);
         paint = new Paint();
         paint.setColor(Color.BLUE);
     }

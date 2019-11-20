@@ -17,8 +17,8 @@ public class Enemy extends Character {
     private int lastDirection;
 
 
-    public Enemy(int tileSize, List<Wall> walls, Bitmap enemyBitmap, int x, int y) {
-        super(tileSize, walls, x, y);
+    public Enemy(List<Wall> walls, Bitmap enemyBitmap, int x, int y) {
+        super(walls, x, y);
         this.randomGenerator = new Random();
         this.image = enemyBitmap;
     }

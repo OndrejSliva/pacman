@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 import java.util.ArrayList;
@@ -53,6 +55,7 @@ public class Level {
     private Bitmap enemiesBitmap[];
 
     private int score;
+    private int lives = 3;
 
     public Level(Resources resources, int width, int heigth) {
         this.width = width;
@@ -90,10 +93,8 @@ public class Level {
 
 
         int tileSize = this.width / mapResized.getWidth();
-        //int tileSize = 50;
+        ConstantHelper.init(this.width, this.heigth, tileSize);
         this.loadImages(tileSize);
-
-        ConstantHelper.TILE_SIZE = tileSize;
 
         for (int x = 0; x < 20; x++) {
             for (int y = 0; y < 15; y++) {
@@ -102,9 +103,9 @@ public class Level {
                 if(val == 1){  //tile
                     this.walls.add(new Wall(x*ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE));
                 } else if (val == 2){ //player
-                    this.player = new Player(walls, tileSize, pacmanOpenResized, pacmanCloseResized, x * ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE);
+                    this.player = new Player(walls, pacmanOpenResized, pacmanCloseResized, x * ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE);
                 } else if (val == 3) {
-                    this.enemies.add(new Enemy(tileSize, walls, enemiesBitmap[this.enemies.size() % 4], x * ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE));
+                    this.enemies.add(new Enemy(walls, enemiesBitmap[this.enemies.size() % 4], x * ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE));
                     this.foods.add(new Food(x*ConstantHelper.TILE_SIZE, y*ConstantHelper.TILE_SIZE));
                 } else {
                     this.foods.add(new Food(x*ConstantHelper.TILE_SIZE, y*ConstantHelper.TILE_SIZE));
@@ -157,6 +158,8 @@ public class Level {
             enemy.draw(canvas);
         }
         player.draw(canvas);
+        this.drawScore(canvas);
+        this.drawLives(canvas);
     }
 
     public void update() {
@@ -168,6 +171,34 @@ public class Level {
         if (this.allFoodIsEaten()) {
             this.resetToBasePosition();
         }
+    }
+
+    private void drawLives(Canvas canvas) {
+        Paint p = new Paint();
+        p.setColor(Color.WHITE);
+        p.setTextSize(ConstantHelper.TILE_SIZE);
+
+        switch (this.lives){
+            default:
+                canvas.drawText(Integer.toString(this.lives) + "x", ConstantHelper.WIDTH - (int)(ConstantHelper.TILE_SIZE * 2.5), (int)(ConstantHelper.TILE_SIZE * 1.25), p);
+                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.WIDTH - (int)(ConstantHelper.TILE_SIZE * 1.25), ConstantHelper.LIVES_Y_POS, null);
+                break;
+            case 3:
+                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.WIDTH - (int)(ConstantHelper.TILE_SIZE * 3.3), ConstantHelper.LIVES_Y_POS, null);
+            case 2:
+                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.WIDTH - (int)(ConstantHelper.TILE_SIZE * 2.2), ConstantHelper.LIVES_Y_POS, null);
+            case 1:
+                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.WIDTH - (int)(ConstantHelper.TILE_SIZE * 1.1), ConstantHelper.LIVES_Y_POS, null);
+                break;
+        };
+    }
+
+    private void drawScore(Canvas canvas) {
+        Paint p = new Paint();
+        p.setColor(Color.WHITE);
+        p.setTextSize(ConstantHelper.TILE_SIZE);
+
+        canvas.drawText(String.valueOf(this.score), (int)(ConstantHelper.TILE_SIZE * 0.25), (int)(ConstantHelper.TILE_SIZE * 1.25), p);
     }
 
     private void checkFoodCollision() {

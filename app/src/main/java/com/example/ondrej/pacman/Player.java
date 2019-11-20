@@ -22,8 +22,8 @@ public class Player extends Character {
     private boolean open = false;
     private int openCloseTimer = 0;
 
-    public Player (List<Wall> walls, int size, Bitmap pacmanOpen, Bitmap pacmanClose, int x, int y) {
-        super(size, walls, x, y);
+    public Player (List<Wall> walls,Bitmap pacmanOpen, Bitmap pacmanClose, int x, int y) {
+        super(walls, x, y);
         this.loadAllPacmanImages(pacmanOpen, pacmanClose);
     }
 

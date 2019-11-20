@@ -28,14 +28,14 @@ abstract public class Character implements IDrawable {
     private int baseX;
     private int baseY;
 
-    public Character(int tileSize, List<Wall> walls, int x, int y) {
-        this.rectangle = new Rect(0, 0, tileSize, tileSize);
+    public Character(List<Wall> walls, int x, int y) {
+        this.rectangle = new Rect(0, 0, ConstantHelper.TILE_SIZE, ConstantHelper.TILE_SIZE);
         this.rectangle.left = this.baseX = x;
-        this.rectangle.top = this.baseY = y;
-        this.rectangle.bottom = this.rectangle.top + tileSize;
-        this.rectangle.right = this.rectangle.left + tileSize;
+        this.rectangle.top = this.baseY = y + ConstantHelper.PANEL_SIZE;
+        this.rectangle.bottom = this.rectangle.top + ConstantHelper.TILE_SIZE;
+        this.rectangle.right = this.rectangle.left + ConstantHelper.TILE_SIZE;
         this.walls = walls;
-        this.speedInTime = getSpeeds(tileSize);
+        this.speedInTime = getSpeeds(ConstantHelper.TILE_SIZE);
     }
 
     public void setBasePosition() {
