@@ -179,4 +179,8 @@ abstract public class Character implements IDrawable {
         }
         return -1;
     }
+
+    public Rect getRectangle() {
+        return this.rectangle;
+    }
 }

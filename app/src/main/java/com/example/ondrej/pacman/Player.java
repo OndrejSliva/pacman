@@ -86,8 +86,4 @@ public class Player extends Character {
             this.openCloseTimer = 0;
         }
     }
-
-    public Rect getRectangle() {
-        return this.rectangle;
-    }
 }

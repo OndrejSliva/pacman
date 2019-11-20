@@ -2,6 +2,7 @@ package com.example.ondrej.pacman;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import java.util.List;
 import java.util.Random;
@@ -73,5 +74,9 @@ public class Enemy extends Character {
             canMoveThere = this.canMoveToDirection(newDirection);
         }
         this.actualDirection = newDirection;
+    }
+
+    public boolean colides(Rect rect) {
+        return this.rectangle.left < rect.right && rect.left < this.rectangle.right && this.rectangle.top < rect.bottom && rect.top < this.rectangle.bottom;
     }
 }

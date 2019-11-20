@@ -1,6 +1,7 @@
 package com.example.ondrej.pacman;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -11,10 +12,12 @@ public class GameScreen extends SurfaceView {
     private Level level;
     private int width;
     private int height;
+    private Context context;
 
     public GameScreen(Context context, int width, int height) {
         super(context);
 
+        this.context = context;
         //mainThread = new MainThread(getHolder(), this);
         setFocusable(true);
         this.width = width;
@@ -37,6 +40,7 @@ public class GameScreen extends SurfaceView {
 
     public void update() {
         this.level.update();
+        this.isEnd();
     }
 
     @Override
@@ -47,5 +51,13 @@ public class GameScreen extends SurfaceView {
 
     public void setPlayerDirection(int direction) {
         this.level.setPlayerNextDirection(direction);
+    }
+
+    private void isEnd() {
+        if (this.level.isEnd()) {
+            mainThread.setRunning(false);
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+        }
     }
 }

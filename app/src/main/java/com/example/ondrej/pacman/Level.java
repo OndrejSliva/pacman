@@ -55,7 +55,9 @@ public class Level {
     private Bitmap enemiesBitmap[];
 
     private int score;
-    private int lives = 3;
+    private int lives = 1;
+
+    private boolean end = false;
 
     public Level(Resources resources, int width, int heigth) {
         this.width = width;
@@ -147,6 +149,38 @@ public class Level {
         }
     }
 
+    private void checkEnemiesCollision() {
+        for (Enemy enemy : enemies) {
+            if (enemy.colides(this.player.getRectangle())) {
+                this.resetOnCollision();
+            }
+        }
+    }
+
+    private void resetOnCollision() {
+        this.lives--;
+
+        if (this.lives == 0) {
+            this.endGame();
+        }
+
+        for(Enemy enemy : enemies){
+            enemy.setBasePosition();
+        }
+
+        this.player.setBasePosition();
+    }
+
+    private void endGame() {
+        //todo check hisgh score
+        this.end = true;
+    }
+
+    public boolean isEnd() {
+        return this.end;
+    }
+
+
     public void draw(Canvas canvas) {
         for (Food food : foods) {
             food.draw(canvas);
@@ -164,6 +198,7 @@ public class Level {
 
     public void update() {
         this.player.update();
+        this.checkEnemiesCollision();
         this.checkFoodCollision();
         for (Enemy enemy : enemies) {
             enemy.update();
