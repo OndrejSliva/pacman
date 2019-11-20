@@ -52,6 +52,8 @@ public class Level {
     private Bitmap enemyPurpleResized;
     private Bitmap enemiesBitmap[];
 
+    private int score;
+
     public Level(Resources resources, int width, int heigth) {
         this.width = width;
         this.heigth = heigth;
@@ -59,6 +61,7 @@ public class Level {
         this.walls = new ArrayList<>();
         this.foods = new ArrayList<>();
         this.enemies = new ArrayList<>();
+        this.score = 0;
         this.initLevel();
     }
 
@@ -154,7 +157,6 @@ public class Level {
             enemy.draw(canvas);
         }
         player.draw(canvas);
-        System.out.println();
     }
 
     public void update() {
@@ -173,6 +175,7 @@ public class Level {
         for (int i = 0; i < this.foods.size(); i++) {
             if (this.foods.get(i).colides(playerRectangle)) {
                 this.foods.remove(i);
+                this.score += ConstantHelper.POINTS_PER_FOOD_EATEN;
                 break;
             }
         }
