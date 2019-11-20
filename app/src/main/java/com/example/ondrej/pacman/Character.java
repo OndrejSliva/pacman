@@ -155,11 +155,12 @@ abstract public class Character implements IDrawable {
         if (this.decrementTime == 0) {
             this.moveTime++;
         } else {
-            this.moveTime--;
-            if (this.moveTime == -1) {
-                this.moveTime = 0;
-            }
             this.decrementTime--;
+            if (this.decrementTime == 0) {
+                this.moveTime++;
+            } else {
+                this.moveTime--;
+            }
         }
 
         this.moveTime = this.moveTime%10;
