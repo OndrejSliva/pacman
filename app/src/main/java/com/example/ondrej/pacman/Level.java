@@ -198,7 +198,7 @@ public class Level {
 
     public void update() {
         this.player.update();
-        this.checkEnemiesCollision();
+        //this.checkEnemiesCollision(); //TODO uncoment after testing
         this.checkFoodCollision();
         for (Enemy enemy : enemies) {
             enemy.update();

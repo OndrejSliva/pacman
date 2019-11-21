@@ -3,7 +3,6 @@ package com.example.ondrej.pacman;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.view.MotionEvent;
 import android.view.SurfaceView;
 
 public class GameScreen extends SurfaceView {
@@ -18,8 +17,7 @@ public class GameScreen extends SurfaceView {
         super(context);
 
         this.context = context;
-        //mainThread = new MainThread(getHolder(), this);
-        setFocusable(true);
+        setFocusable(false);
         this.width = width;
         this.height = height;
     }
@@ -30,12 +28,6 @@ public class GameScreen extends SurfaceView {
         mainThread = new MainThread(getHolder(), this);
         mainThread.setRunning(true);
         mainThread.start();
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        //TODO ?
-        return true;
     }
 
     public void update() {

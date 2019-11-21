@@ -16,4 +16,9 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(getApplicationContext(), GameActivity.class);
         startActivity(intent);
     }
+
+    public void settings(View view) {
+        Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+        startActivity(intent);
+    }
 }
