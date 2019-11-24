@@ -1,5 +1,6 @@
 package com.example.ondrej.pacman;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,11 +8,19 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.AUDIO_SERVICE;
+
 public class Level {
+
+    public static int STATUS_RUN = 1;
+    public static int STATUS_PAUSE = 2;
+    public static int STATUS_END = 3;
 
     private int [][] map = new int[][]{
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -53,21 +62,27 @@ public class Level {
     private Bitmap enemyPurple;
     private Bitmap enemyPurpleResized;
     private Bitmap enemiesBitmap[];
+    private SoundAgent soundAgent;
 
     private int score;
-    private int lives = 1;
+    private int lives = 9999;
 
     private boolean end = false;
+    private boolean pause = false;
 
-    public Level(Resources resources, int width, int heigth) {
+    private int status = STATUS_RUN;
+
+    public Level(Context context, SoundAgent soundAgent, int width, int heigth) {
         this.width = width;
         this.heigth = heigth;
-        this.resources = resources;
+        this.resources = context.getResources();
         this.walls = new ArrayList<>();
         this.foods = new ArrayList<>();
         this.enemies = new ArrayList<>();
         this.score = 0;
         this.initLevel();
+        this.soundAgent = soundAgent;
+        this.status = STATUS_PAUSE;
     }
 
     private void loadImages(int tileSize) {
@@ -132,6 +147,7 @@ public class Level {
         }*/
     }
 
+
     private void resetToBasePosition() {
         this.player.setBasePosition();
         for (Enemy enemy : enemies) {
@@ -147,6 +163,9 @@ public class Level {
                 }
             }
         }
+
+        this.status = STATUS_PAUSE;
+        this.soundAgent.playBeginMusic();
     }
 
     private void checkEnemiesCollision() {
@@ -169,6 +188,8 @@ public class Level {
         }
 
         this.player.setBasePosition();
+        this.status = STATUS_PAUSE;
+        this.soundAgent.playBeginMusic();
     }
 
     private void endGame() {
@@ -177,7 +198,11 @@ public class Level {
     }
 
     public boolean isEnd() {
-        return this.end;
+        return this.status == STATUS_END;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
 
@@ -194,17 +219,20 @@ public class Level {
         player.draw(canvas);
         this.drawScore(canvas);
         this.drawLives(canvas);
+
     }
 
     public void update() {
-        this.player.update();
-        //this.checkEnemiesCollision(); //TODO uncoment after testing
-        this.checkFoodCollision();
-        for (Enemy enemy : enemies) {
-            enemy.update();
-        }
-        if (this.allFoodIsEaten()) {
-            this.resetToBasePosition();
+        if (this.status == STATUS_RUN) {
+            this.player.update();
+            //this.checkEnemiesCollision(); //TODO uncoment after testing
+            this.checkFoodCollision();
+            for (Enemy enemy : enemies) {
+                enemy.update();
+            }
+            if (this.allFoodIsEaten()) {
+                this.resetToBasePosition();
+            }
         }
     }
 

@@ -1,13 +1,8 @@
 package com.example.ondrej.pacman;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 
 import java.util.List;
 
@@ -19,12 +14,17 @@ public class Player extends Character {
     private Bitmap[] pacmanClose;
 
     //otevírání pusy
-    private boolean open = false;
+    private boolean open = true;
     private int openCloseTimer = 0;
 
     public Player (List<Wall> walls,Bitmap pacmanOpen, Bitmap pacmanClose, int x, int y) {
         super(walls, x, y);
         this.loadAllPacmanImages(pacmanOpen, pacmanClose);
+    }
+
+    public void setBasePosition() {
+        super.setBasePosition();
+        this.open = true;
     }
 
     @Override

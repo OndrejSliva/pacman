@@ -38,7 +38,9 @@ public class GameActivity extends Activity {
         canvasLayout.addView(gameScreen);
 
         this.initControl();
+    }
 
+    public void onWindowFocusChanged(boolean hasFocus) {
         gameScreen.run();
     }
 

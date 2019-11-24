@@ -3,6 +3,7 @@ package com.example.ondrej.pacman;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 import android.view.SurfaceView;
 
 public class GameScreen extends SurfaceView {
@@ -12,6 +13,7 @@ public class GameScreen extends SurfaceView {
     private int width;
     private int height;
     private Context context;
+    private SoundAgent soundAgent;
 
     public GameScreen(Context context, int width, int height) {
         super(context);
@@ -24,10 +26,20 @@ public class GameScreen extends SurfaceView {
 
     public void run() {
 
-        level = new Level(getResources(), width, height);
+        soundAgent = new SoundAgent(context);
+        level = new Level(context, soundAgent, width, height);
         mainThread = new MainThread(getHolder(), this);
+        soundAgent.playBeginMusic();
         mainThread.setRunning(true);
         mainThread.start();
+
+        MediaPlayer mediaPlayer = soundAgent.getMediaPlayerForBeginMusic();
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                level.setStatus(Level.STATUS_RUN);
+            }
+        });
     }
 
     public void update() {
