@@ -10,24 +10,21 @@ public class GameScreen extends SurfaceView {
 
     private MainThread mainThread;
     private Level level;
-    private int width;
-    private int height;
     private Context context;
     private SoundAgent soundAgent;
+    private int levelId;
 
-    public GameScreen(Context context, int width, int height) {
+    public GameScreen(Context context, int levelId) {
         super(context);
-
+        this.levelId = levelId;
         this.context = context;
         setFocusable(false);
-        this.width = width;
-        this.height = height;
     }
 
     public void run() {
 
         soundAgent = new SoundAgent(context);
-        level = new Level(context, soundAgent, width, height);
+        level = new Level(context, soundAgent, levelId);
         mainThread = new MainThread(getHolder(), this);
         soundAgent.playBeginMusic();
         mainThread.setRunning(true);

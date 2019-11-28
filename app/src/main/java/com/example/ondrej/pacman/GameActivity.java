@@ -2,6 +2,7 @@ package com.example.ondrej.pacman;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -23,18 +24,17 @@ public class GameActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Intent intent = getIntent();
+        int levelId = intent.getIntExtra("level", 0);
+
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.game_layout);
-        Display display = getWindowManager().getDefaultDisplay();
-        Point p = new Point();
-        display.getSize(p);
-        int width = p.x;
-        int height = p.y;
 
         LinearLayout canvasLayout = (LinearLayout) findViewById(R.id.canvas_layout);
-        gameScreen = new GameScreen(this, width, height);
+        gameScreen = new GameScreen(this, levelId);
         canvasLayout.addView(gameScreen);
 
         this.initControl();

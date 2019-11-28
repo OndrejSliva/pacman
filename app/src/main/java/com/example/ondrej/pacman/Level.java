@@ -8,13 +8,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.Context.AUDIO_SERVICE;
 
 public class Level {
 
@@ -22,29 +21,31 @@ public class Level {
     public static int STATUS_PAUSE = 2;
     public static int STATUS_END = 3;
 
-    private int [][] map = new int[][]{
-        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-        {1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1},
-        {1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1},
-        {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1},
-        {1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1},
-        {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1},
-        {1, 0, 1, 0, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1},
-        {1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
-        {1, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    };
+    /*private int [][] map = new int[][]{
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 1},
+        {1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1},
+        {1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1},
+        {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+        {1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1},
+        {1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1},
+        {1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1},
+        {1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1},
+        {1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1},
+        {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+        {1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1},
+        {1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1},
+        {1, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    };*/
+
+    private int [][] map;
 
     private Player player;
     private Resources resources;
     private List<Wall> walls;
-    private int width;
-    private int heigth;
     private List<Food> foods;
 
     private List<Enemy> enemies;
@@ -64,40 +65,70 @@ public class Level {
     private Bitmap enemiesBitmap[];
     private SoundAgent soundAgent;
 
+    private int mapWidth;
+    private int mapHeight;
+
     private int score;
-    private int lives = 9999;
+    private int lives = 3;
 
     private boolean end = false;
     private boolean pause = false;
 
     private int status = STATUS_RUN;
 
-    public Level(Context context, SoundAgent soundAgent, int width, int heigth) {
-        this.width = width;
-        this.heigth = heigth;
+    public Level(Context context, SoundAgent soundAgent, int levelId) {
         this.resources = context.getResources();
         this.walls = new ArrayList<>();
         this.foods = new ArrayList<>();
         this.enemies = new ArrayList<>();
         this.score = 0;
+        this.loadMap(context, levelId);
         this.initLevel();
         this.soundAgent = soundAgent;
         this.status = STATUS_PAUSE;
     }
 
-    private void loadImages(int tileSize) {
+    private void loadMap(Context context, int levelId) {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.getAssets().open("levels.txt")));
+
+            int line = 0;
+            String mLine;
+            while ((mLine = bufferedReader.readLine()) != null) {
+                if (line++ == levelId) {
+
+                    String[] values = mLine.split(",");
+
+                    this.mapWidth = Integer.valueOf(values[0]);
+                    this.mapHeight = Integer.valueOf(values[1]);
+                    map = new int[mapHeight][mapWidth];
+
+                    for (int i = 2; i < values.length; i++) {
+                        int value = Integer.valueOf(values[i]);
+                        map[(i - 2) / mapWidth][(i - 2) % mapWidth] = value;
+                    }
+                    break;
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadImages() {
         pacmanOpen = BitmapFactory.decodeResource(resources, R.drawable.pacman_open);
-        pacmanOpenResized = Bitmap.createScaledBitmap(pacmanOpen, tileSize, tileSize, false);
+        pacmanOpenResized = Bitmap.createScaledBitmap(pacmanOpen, ConstantHelper.TILE_SIZE, ConstantHelper.TILE_SIZE, false);
         pacmanClose = BitmapFactory.decodeResource(resources, R.drawable.pacman_close);
-        pacmanCloseResized = Bitmap.createScaledBitmap(pacmanClose, tileSize, tileSize, false);
+        pacmanCloseResized = Bitmap.createScaledBitmap(pacmanClose, ConstantHelper.TILE_SIZE, ConstantHelper.TILE_SIZE, false);
         enemyRed = BitmapFactory.decodeResource(resources, R.drawable.enemy_red);
-        enemyRedResized = Bitmap.createScaledBitmap(enemyRed, tileSize, tileSize, false);
+        enemyRedResized = Bitmap.createScaledBitmap(enemyRed, ConstantHelper.TILE_SIZE, ConstantHelper.TILE_SIZE, false);
         enemyBlue = BitmapFactory.decodeResource(resources, R.drawable.enemy_blue);
-        enemyBlueResized = Bitmap.createScaledBitmap(enemyBlue, tileSize, tileSize, false);
+        enemyBlueResized = Bitmap.createScaledBitmap(enemyBlue, ConstantHelper.TILE_SIZE, ConstantHelper.TILE_SIZE, false);
         enemyYellow = BitmapFactory.decodeResource(resources, R.drawable.enemy_yellow);
-        enemyYellowResized = Bitmap.createScaledBitmap(enemyYellow, tileSize, tileSize, false);
+        enemyYellowResized = Bitmap.createScaledBitmap(enemyYellow, ConstantHelper.TILE_SIZE, ConstantHelper.TILE_SIZE, false);
         enemyPurple = BitmapFactory.decodeResource(resources, R.drawable.enemy_purple);
-        enemyPurpleResized = Bitmap.createScaledBitmap(enemyPurple, tileSize, tileSize, false);
+        enemyPurpleResized = Bitmap.createScaledBitmap(enemyPurple, ConstantHelper.TILE_SIZE, ConstantHelper.TILE_SIZE, false);
         enemiesBitmap = new Bitmap[]{enemyRedResized, enemyBlueResized, enemyYellowResized, enemyPurpleResized};
     }
 
@@ -105,16 +136,15 @@ public class Level {
         //int tileSize = this.width / 20;
         /*Drawable d = resources.getDrawable(R.drawable.map);
         Bitmap bitmap = ((BitmapDrawable)d).getBitmap();*/
-        Bitmap mapBitmap = BitmapFactory.decodeResource(resources, R.drawable.map);
-        Bitmap mapResized = Bitmap.createScaledBitmap(mapBitmap, 20, 15, false);
+        //Bitmap mapBitmap = BitmapFactory.decodeResource(resources, R.drawable.map);
+        //Bitmap mapResized = Bitmap.createScaledBitmap(mapBitmap, 20, 15, false);
 
 
-        int tileSize = this.width / mapResized.getWidth();
-        ConstantHelper.init(this.width, this.heigth, tileSize);
-        this.loadImages(tileSize);
+        ConstantHelper.initGameSizesByMapWidth(this.mapWidth);
+        this.loadImages();
 
-        for (int x = 0; x < 20; x++) {
-            for (int y = 0; y < 15; y++) {
+        for (int x = 0; x < this.mapWidth; x++) {
+            for (int y = 0; y < this.mapHeight; y++) {
                 int val = map[y][x];
 
                 if(val == 1){  //tile
@@ -225,7 +255,7 @@ public class Level {
     public void update() {
         if (this.status == STATUS_RUN) {
             this.player.update();
-            //this.checkEnemiesCollision(); //TODO uncoment after testing
+            this.checkEnemiesCollision(); //TODO uncoment after testing
             this.checkFoodCollision();
             for (Enemy enemy : enemies) {
                 enemy.update();
@@ -243,15 +273,15 @@ public class Level {
 
         switch (this.lives){
             default:
-                canvas.drawText(Integer.toString(this.lives) + "x", ConstantHelper.WIDTH - (int)(ConstantHelper.TILE_SIZE * 2.5), (int)(ConstantHelper.TILE_SIZE * 1.25), p);
-                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.WIDTH - (int)(ConstantHelper.TILE_SIZE * 1.25), ConstantHelper.LIVES_Y_POS, null);
+                canvas.drawText(Integer.toString(this.lives) + "x", ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 2.5), (int)(ConstantHelper.TILE_SIZE * 1.25), p);
+                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 1.25), ConstantHelper.LIVES_Y_POS, null);
                 break;
             case 3:
-                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.WIDTH - (int)(ConstantHelper.TILE_SIZE * 3.3), ConstantHelper.LIVES_Y_POS, null);
+                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 3.3), ConstantHelper.LIVES_Y_POS, null);
             case 2:
-                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.WIDTH - (int)(ConstantHelper.TILE_SIZE * 2.2), ConstantHelper.LIVES_Y_POS, null);
+                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 2.2), ConstantHelper.LIVES_Y_POS, null);
             case 1:
-                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.WIDTH - (int)(ConstantHelper.TILE_SIZE * 1.1), ConstantHelper.LIVES_Y_POS, null);
+                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 1.1), ConstantHelper.LIVES_Y_POS, null);
                 break;
         };
     }
