@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -28,7 +27,14 @@ public class ChooseLevelActivity extends Activity {
     }
 
     public void onWindowFocusChanged(boolean hasFocus) {
-        this.loadLevels();
+        if (!areLevelsLoaded()) {
+            this.loadLevels();
+        }
+    }
+
+    private boolean areLevelsLoaded() {
+        TableLayout tableLayout = (TableLayout) findViewById(R.id.level_list);
+        return tableLayout.getChildCount() != 0;
     }
 
     private void loadLevels() {

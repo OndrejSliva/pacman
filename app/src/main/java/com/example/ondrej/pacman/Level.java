@@ -71,10 +71,7 @@ public class Level {
     private int score;
     private int lives = 3;
 
-    private boolean end = false;
-    private boolean pause = false;
-
-    private int status = STATUS_RUN;
+    private int status;
 
     public Level(Context context, SoundAgent soundAgent, int levelId) {
         this.resources = context.getResources();
@@ -207,10 +204,12 @@ public class Level {
     }
 
     private void resetOnCollision() {
-        this.lives--;
+        this.status = STATUS_PAUSE;
 
+        this.lives--;
         if (this.lives == 0) {
-            this.endGame();
+            this.status = STATUS_END;
+            return;
         }
 
         for(Enemy enemy : enemies){
@@ -218,13 +217,7 @@ public class Level {
         }
 
         this.player.setBasePosition();
-        this.status = STATUS_PAUSE;
         this.soundAgent.playBeginMusic();
-    }
-
-    private void endGame() {
-        //todo check hisgh score
-        this.end = true;
     }
 
     public boolean isEnd() {

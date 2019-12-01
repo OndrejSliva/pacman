@@ -41,7 +41,7 @@ public class GameActivity extends Activity {
     }
 
     public void onWindowFocusChanged(boolean hasFocus) {
-        gameScreen.run();
+        if (hasFocus) gameScreen.run();
     }
 
     private void initGestureControl(final GameScreen gameScreen) {

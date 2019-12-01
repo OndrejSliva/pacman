@@ -137,16 +137,16 @@ abstract public class Character implements IDrawable {
     protected void moveByActualDirection() {
         switch (this.actualDirection) {
             case DIRECTION_RIGHT:
-                if (canMoveRight()) { moveRight(); }
+                if (canMoveRight()) { moveRight(); } else {return;}
                 break;
             case DIRECTION_LEFT:
-                if (canMoveLeft()) { moveLeft(); }
+                if (canMoveLeft()) { moveLeft(); } else {return;}
                 break;
             case DIRECTION_UP:
-                if (canMoveUp()) { moveUp(); }
+                if (canMoveUp()) { moveUp(); } else {return;}
                 break;
             case DIRECTION_DOWN:
-                if (canMoveDown()) { moveDown();}
+                if (canMoveDown()) { moveDown();} else {return;}
                 break;
             default:
                 break;
