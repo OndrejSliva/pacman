@@ -57,7 +57,9 @@ public class GameScreen extends SurfaceView {
     private void isEnd() {
         if (this.level.isEnd()) {
             mainThread.setRunning(false);
-            Intent intent = new Intent(context, MainActivity.class);
+            Intent intent = new Intent(context, WriteNameActivity.class);
+            intent.putExtra("score", level.getScore());
+            intent.putExtra("levelId", levelId);
             context.startActivity(intent);
         }
     }

@@ -25,6 +25,11 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
+    public void highScore(View view) {
+        Intent intent = new Intent(getApplicationContext(), HighScoreActivity.class);
+        startActivity(intent);
+    }
+
     private void loadScreenSizeInfo() {
         Display display = getWindowManager().getDefaultDisplay();
         Point p = new Point();
