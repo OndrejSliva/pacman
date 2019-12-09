@@ -51,18 +51,6 @@ public class Level {
 
     private List<Enemy> enemies;
 
-    private Bitmap pacmanOpen;
-    private Bitmap pacmanOpenResized;
-    private Bitmap pacmanClose;
-    private Bitmap pacmanCloseResized;
-    private Bitmap enemyRed;
-    private Bitmap enemyRedResized;
-    private Bitmap enemyBlue;
-    private Bitmap enemyBlueResized;
-    private Bitmap enemyYellow;
-    private Bitmap enemyYellowResized;
-    private Bitmap enemyPurple;
-    private Bitmap enemyPurpleResized;
     private Bitmap enemiesBitmap[];
     private SoundAgent soundAgent;
 
@@ -115,19 +103,7 @@ public class Level {
     }
 
     private void loadImages() {
-        pacmanOpen = BitmapFactory.decodeResource(resources, R.drawable.pacman_open);
-        pacmanOpenResized = Bitmap.createScaledBitmap(pacmanOpen, ConstantHelper.TILE_SIZE, ConstantHelper.TILE_SIZE, false);
-        pacmanClose = BitmapFactory.decodeResource(resources, R.drawable.pacman_close);
-        pacmanCloseResized = Bitmap.createScaledBitmap(pacmanClose, ConstantHelper.TILE_SIZE, ConstantHelper.TILE_SIZE, false);
-        enemyRed = BitmapFactory.decodeResource(resources, R.drawable.enemy_red);
-        enemyRedResized = Bitmap.createScaledBitmap(enemyRed, ConstantHelper.TILE_SIZE, ConstantHelper.TILE_SIZE, false);
-        enemyBlue = BitmapFactory.decodeResource(resources, R.drawable.enemy_blue);
-        enemyBlueResized = Bitmap.createScaledBitmap(enemyBlue, ConstantHelper.TILE_SIZE, ConstantHelper.TILE_SIZE, false);
-        enemyYellow = BitmapFactory.decodeResource(resources, R.drawable.enemy_yellow);
-        enemyYellowResized = Bitmap.createScaledBitmap(enemyYellow, ConstantHelper.TILE_SIZE, ConstantHelper.TILE_SIZE, false);
-        enemyPurple = BitmapFactory.decodeResource(resources, R.drawable.enemy_purple);
-        enemyPurpleResized = Bitmap.createScaledBitmap(enemyPurple, ConstantHelper.TILE_SIZE, ConstantHelper.TILE_SIZE, false);
-        enemiesBitmap = new Bitmap[]{enemyRedResized, enemyBlueResized, enemyYellowResized, enemyPurpleResized};
+        enemiesBitmap = new Bitmap[]{ImageHelper.getEnemyRed(), ImageHelper.getEnemyBlue(), ImageHelper.getEnemyYellow(), ImageHelper.getEnemyPurple()};
     }
 
     public void initLevel() {
@@ -139,6 +115,7 @@ public class Level {
 
 
         ConstantHelper.initGameSizesByMapWidth(this.mapWidth);
+        ImageHelper.initLevelImages(resources);
         this.loadImages();
 
         for (int x = 0; x < this.mapWidth; x++) {
@@ -148,7 +125,7 @@ public class Level {
                 if(val == 1){  //tile
                     this.walls.add(new Wall(x*ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE));
                 } else if (val == 2){ //player
-                    this.player = new Player(walls, pacmanOpenResized, pacmanCloseResized, x * ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE);
+                    this.player = new Player(walls, x * ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE);
                 } else if (val == 3) {
                     this.enemies.add(new Enemy(walls, enemiesBitmap[this.enemies.size() % 4], x * ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE));
                     this.foods.add(new Food(x*ConstantHelper.TILE_SIZE, y*ConstantHelper.TILE_SIZE));
@@ -268,14 +245,14 @@ public class Level {
         switch (this.lives){
             default:
                 canvas.drawText(Integer.toString(this.lives) + "x", ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 2.5), (int)(ConstantHelper.TILE_SIZE * 1.25), p);
-                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 1.25), ConstantHelper.LIVES_Y_POS, null);
+                canvas.drawBitmap(ImageHelper.getPacmanOpenRight(), ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 1.25), ConstantHelper.LIVES_Y_POS, null);
                 break;
             case 3:
-                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 3.3), ConstantHelper.LIVES_Y_POS, null);
+                canvas.drawBitmap(ImageHelper.getPacmanOpenRight(), ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 3.3), ConstantHelper.LIVES_Y_POS, null);
             case 2:
-                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 2.2), ConstantHelper.LIVES_Y_POS, null);
+                canvas.drawBitmap(ImageHelper.getPacmanOpenRight(), ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 2.2), ConstantHelper.LIVES_Y_POS, null);
             case 1:
-                canvas.drawBitmap(pacmanOpenResized, ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 1.1), ConstantHelper.LIVES_Y_POS, null);
+                canvas.drawBitmap(ImageHelper.getPacmanOpenRight(), ConstantHelper.SCREEN_WIDTH - (int)(ConstantHelper.TILE_SIZE * 1.1), ConstantHelper.LIVES_Y_POS, null);
                 break;
         };
     }

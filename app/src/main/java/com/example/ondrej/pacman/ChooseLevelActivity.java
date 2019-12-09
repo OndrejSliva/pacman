@@ -69,22 +69,15 @@ public class ChooseLevelActivity extends Activity {
                         Paint paint = new Paint();
                         paint.setColor(Color.BLUE);
                         canvas.drawRect(x, y, x + smallTileSize, y + smallTileSize, paint);
-                    }else
-                    if (value == 0) {
+                    } else if (value == 0) {
                         canvas.drawRect(x, y, x + smallTileSize, y + smallTileSize, blackPaint);
-                    }else
-                    if (value == 2) {
-
+                    } else if (value == 2) {
                         Bitmap pacmanOpen = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.pacman_open);
                         Bitmap pacmanOpenResized = Bitmap.createScaledBitmap(pacmanOpen, smallTileSize, smallTileSize, false);
-
                         canvas.drawBitmap(pacmanOpenResized, x, y, null);
-                    }else
-                    if (value == 3) {
-
+                    } else if (value == 3) {
                         Bitmap enemyRed = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.enemy_red);
                         Bitmap enemyRedResized = Bitmap.createScaledBitmap(enemyRed, smallTileSize, smallTileSize, false);
-
                         canvas.drawBitmap(enemyRedResized, x, y, null);
                     }
                 }

@@ -2,7 +2,6 @@ package com.example.ondrej.pacman;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 
 import java.util.List;
 
@@ -17,9 +16,9 @@ public class Player extends Character {
     private boolean open = true;
     private int openCloseTimer = 0;
 
-    public Player (List<Wall> walls,Bitmap pacmanOpen, Bitmap pacmanClose, int x, int y) {
+    public Player (List<Wall> walls, int x, int y) {
         super(walls, x, y);
-        this.loadAllPacmanImages(pacmanOpen, pacmanClose);
+        this.initAllPacmanImages();
     }
 
     public void setBasePosition() {
@@ -38,25 +37,18 @@ public class Player extends Character {
         canvas.drawBitmap(pacman, rectangle.left, rectangle.top, null);
     }
 
-    private void loadAllPacmanImages(Bitmap pacmanOpen, Bitmap pacmanClose) {
+    private void initAllPacmanImages() {
         this.pacmanOpen = new Bitmap[4];
         this.pacmanClose = new Bitmap[4];
 
-        this.pacmanOpen[DIRECTION_RIGHT] = pacmanOpen;
-        this.pacmanClose[DIRECTION_RIGHT] = pacmanClose;
-
-        Matrix matrix = new Matrix();
-        matrix.postRotate(90);
-        this.pacmanOpen[DIRECTION_DOWN] = Bitmap.createBitmap(pacmanOpen, 0, 0, pacmanOpen.getWidth(), pacmanOpen.getHeight(), matrix, true);
-        this.pacmanClose[DIRECTION_DOWN] = Bitmap.createBitmap(pacmanClose, 0, 0, pacmanClose.getWidth(), pacmanClose.getHeight(), matrix, true);
-        matrix = new Matrix();
-        matrix.postRotate(270);
-        this.pacmanOpen[DIRECTION_UP] = Bitmap.createBitmap(pacmanOpen, 0, 0, pacmanOpen.getWidth(), pacmanOpen.getHeight(), matrix, true);
-        this.pacmanClose[DIRECTION_UP] = Bitmap.createBitmap(pacmanClose, 0, 0, pacmanClose.getWidth(), pacmanClose.getHeight(), matrix, true);
-        matrix = new Matrix();
-        matrix.preScale(-1, 1);
-        this.pacmanOpen[DIRECTION_LEFT] = Bitmap.createBitmap(pacmanOpen, 0, 0, pacmanOpen.getWidth(), pacmanOpen.getHeight(), matrix, true);
-        this.pacmanClose[DIRECTION_LEFT] = Bitmap.createBitmap(pacmanClose, 0, 0, pacmanClose.getWidth(), pacmanClose.getHeight(), matrix, true);
+        this.pacmanOpen[DIRECTION_RIGHT] = ImageHelper.getPacmanOpenRight();
+        this.pacmanClose[DIRECTION_RIGHT] = ImageHelper.getPacmanCloseRight();
+        this.pacmanOpen[DIRECTION_DOWN] = ImageHelper.getPacmanOpenDown();
+        this.pacmanClose[DIRECTION_DOWN] = ImageHelper.getPacmanCloseDown();
+        this.pacmanOpen[DIRECTION_UP] = ImageHelper.getPacmanOpenUp();
+        this.pacmanClose[DIRECTION_UP] = ImageHelper.getPacmanCloseUp();
+        this.pacmanOpen[DIRECTION_LEFT] = ImageHelper.getPacmanOpenLeft();
+        this.pacmanClose[DIRECTION_LEFT] = ImageHelper.getPacmanCloseLeft();
     }
 
     public void setNextDirection(int nextDirection) {

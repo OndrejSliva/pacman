@@ -37,5 +37,6 @@ public class MainActivity extends Activity {
         int width = p.x;
         int height = p.y;
         ConstantHelper.setScreenSize(width, height);
+        ImageHelper.initSharedImages(getResources());
     }
 }

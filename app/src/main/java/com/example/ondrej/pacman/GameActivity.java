@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class GameActivity extends Activity {
@@ -45,6 +47,11 @@ public class GameActivity extends Activity {
     }
 
     private void initGestureControl(final GameScreen gameScreen) {
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.control_layout);
+        linearLayout.setGravity(Gravity.CENTER);
+        final ImageView imageView = new ImageView(getApplicationContext());
+        imageView.setImageBitmap(ImageHelper.getArrowUp());
+        linearLayout.addView(imageView);
         gestureDetector = new GestureDetector(this,
             new GestureDetector.SimpleOnGestureListener() {
                 @Override
@@ -52,14 +59,18 @@ public class GameActivity extends Activity {
                     if (Math.abs(changeX) > Math.abs(changeY) && Math.abs(changeX) > 5) {
                         if (changeX > 0) {
                             gameScreen.setPlayerDirection(Player.DIRECTION_RIGHT);
+                            imageView.setImageBitmap(ImageHelper.getArrowRight());
                         } else {
                             gameScreen.setPlayerDirection(Player.DIRECTION_LEFT);
+                            imageView.setImageBitmap(ImageHelper.getArrowLeft());
                         }
                     } else if (Math.abs(changeY) > Math.abs(changeX) && Math.abs(changeY) > 5) {
                         if (changeY > 0) {
                             gameScreen.setPlayerDirection(Player.DIRECTION_DOWN);
+                            imageView.setImageBitmap(ImageHelper.getArrowDown());
                         } else {
                             gameScreen.setPlayerDirection(Player.DIRECTION_UP);
+                            imageView.setImageBitmap(ImageHelper.getArrowUp());
                         }
                     }
 

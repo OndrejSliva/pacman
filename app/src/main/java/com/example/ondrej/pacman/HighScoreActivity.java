@@ -90,16 +90,12 @@ public class HighScoreActivity extends Activity {
                     } else if (value == 0) {
                         canvas.drawRect(x, y, x + smallTileSize, y + smallTileSize, blackPaint);
                     } else if (value == 2) {
-
                         Bitmap pacmanOpen = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.pacman_open);
                         Bitmap pacmanOpenResized = Bitmap.createScaledBitmap(pacmanOpen, smallTileSize, smallTileSize, false);
-
                         canvas.drawBitmap(pacmanOpenResized, x, y, null);
                     } else if (value == 3) {
-
                         Bitmap enemyRed = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.enemy_red);
                         Bitmap enemyRedResized = Bitmap.createScaledBitmap(enemyRed, smallTileSize, smallTileSize, false);
-
                         canvas.drawBitmap(enemyRedResized, x, y, null);
                     }
                 }
