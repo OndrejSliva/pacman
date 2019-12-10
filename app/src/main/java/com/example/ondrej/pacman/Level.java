@@ -3,7 +3,6 @@ package com.example.ondrej.pacman;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,27 +19,6 @@ public class Level {
     public static int STATUS_RUN = 1;
     public static int STATUS_PAUSE = 2;
     public static int STATUS_END = 3;
-
-    //21 x 17
-    /*private int [][] map = new int[][]{
-        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    };*/
 
     private int [][] map;
 
@@ -61,6 +39,8 @@ public class Level {
     private int lives = 1;
 
     private int status;
+
+    private boolean firstEatSound = true;
 
     public Level(Context context, SoundAgent soundAgent, int levelId) {
         this.resources = context.getResources();
@@ -107,12 +87,6 @@ public class Level {
     }
 
     public void initLevel() {
-        //int tileSize = this.width / 20;
-        /*Drawable d = resources.getDrawable(R.drawable.map);
-        Bitmap bitmap = ((BitmapDrawable)d).getBitmap();*/
-        //Bitmap mapBitmap = BitmapFactory.decodeResource(resources, R.drawable.map);
-        //Bitmap mapResized = Bitmap.createScaledBitmap(mapBitmap, 20, 15, false);
-
 
         ConstantHelper.initGameSizesByMapWidth(this.mapWidth);
         ImageHelper.initLevelImages(resources);
@@ -134,22 +108,6 @@ public class Level {
                 }
             }
         }
-
-        /*int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                int val = bitmap.getPixel(x, y);
-
-                if(val == 0xFF000000){  //tile
-                    this.walls.add(new Wall(x*ConstantHelper.TILE_SIZE, y*ConstantHelper.TILE_SIZE));
-                } else if (val == 0xFF0002FF){ //player
-                    this.player.setPosition(x * ConstantHelper.TILE_SIZE, y * ConstantHelper.TILE_SIZE);
-                } else {
-                    this.foods.add(new Food(x*ConstantHelper.TILE_SIZE, y*ConstantHelper.TILE_SIZE));
-                }
-            }
-        }*/
     }
 
 
@@ -176,26 +134,33 @@ public class Level {
     private void checkEnemiesCollision() {
         for (Enemy enemy : enemies) {
             if (enemy.colides(this.player.getRectangle())) {
-                this.resetOnCollision();
+                this.processOnCollision();
             }
         }
     }
 
-    private void resetOnCollision() {
-        this.status = STATUS_PAUSE;
-
-        this.lives--;
+    public void checkEndGame() {
         if (this.lives == 0) {
             this.status = STATUS_END;
             return;
         }
+        this.resetOnCollision();
+    }
 
+    private void resetOnCollision() {
         for(Enemy enemy : enemies){
             enemy.setBasePosition();
         }
 
         this.player.setBasePosition();
         this.soundAgent.playBeginMusic();
+    }
+
+    private void processOnCollision() {
+        this.status = STATUS_PAUSE;
+
+        this.lives--;
+        soundAgent.playDeathSound();
     }
 
     public boolean isEnd() {
@@ -271,6 +236,8 @@ public class Level {
             if (this.foods.get(i).colides(playerRectangle)) {
                 this.foods.remove(i);
                 this.score += ConstantHelper.POINTS_PER_FOOD_EATEN;
+                if (firstEatSound) { soundAgent.playEatSound(); } else { soundAgent.playEatSound2(); }
+                firstEatSound = !firstEatSound;
                 break;
             }
         }

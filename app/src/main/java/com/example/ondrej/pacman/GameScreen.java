@@ -37,6 +37,13 @@ public class GameScreen extends SurfaceView {
                 level.setStatus(Level.STATUS_RUN);
             }
         });
+        mediaPlayer = soundAgent.getMediaPlayerForDeathSound();
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp){
+                level.checkEndGame();
+            }
+        });
     }
 
     public void update() {
