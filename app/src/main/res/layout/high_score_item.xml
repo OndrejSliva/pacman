@@ -13,7 +13,9 @@
             android:id="@+id/column_position"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textColor="@color/colorYellow"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -26,7 +28,9 @@
             android:id="@+id/column_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textColor="@color/colorYellow"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -39,6 +43,8 @@
             android:id="@+id/column_score"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textColor="@color/colorYellow"
+            android:textSize="20sp" />
     </LinearLayout>
 </LinearLayout>

@@ -39,4 +39,8 @@ public class MainActivity extends Activity {
         ConstantHelper.setScreenSize(width, height);
         ImageHelper.initSharedImages(getResources());
     }
+
+    public void exit(View view) {
+        finishAndRemoveTask();
+    }
 }
