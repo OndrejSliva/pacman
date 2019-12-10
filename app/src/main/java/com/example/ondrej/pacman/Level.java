@@ -17,8 +17,9 @@ import java.util.List;
 public class Level {
 
     public static int STATUS_RUN = 1;
-    public static int STATUS_PAUSE = 2;
+    public static int STATUS_PAUSE_BEFORE_GAME_STARTS = 2;
     public static int STATUS_END = 3;
+    public static int STATUS_PAUSE = 4;
 
     private int [][] map;
 
@@ -42,6 +43,8 @@ public class Level {
 
     private boolean firstEatSound = true;
 
+    private boolean paused = false;
+
     public Level(Context context, SoundAgent soundAgent, int levelId) {
         this.resources = context.getResources();
         this.walls = new ArrayList<>();
@@ -51,7 +54,15 @@ public class Level {
         this.loadMap(context, levelId);
         this.initLevel();
         this.soundAgent = soundAgent;
-        this.status = STATUS_PAUSE;
+        this.status = STATUS_PAUSE_BEFORE_GAME_STARTS;
+    }
+
+    public void setPaused() {
+        this.paused = true;
+    }
+
+    public void setPlay() {
+        this.paused = false;
     }
 
     private void loadMap(Context context, int levelId) {
@@ -127,7 +138,7 @@ public class Level {
             }
         }
 
-        this.status = STATUS_PAUSE;
+        this.status = STATUS_PAUSE_BEFORE_GAME_STARTS;
         this.soundAgent.playBeginMusic();
     }
 
@@ -157,7 +168,7 @@ public class Level {
     }
 
     private void processOnCollision() {
-        this.status = STATUS_PAUSE;
+        this.status = STATUS_PAUSE_BEFORE_GAME_STARTS;
 
         this.lives--;
         soundAgent.playDeathSound();
@@ -189,6 +200,10 @@ public class Level {
     }
 
     public void update() {
+        if (this.paused) {
+            return;
+        }
+
         if (this.status == STATUS_RUN) {
             this.player.update();
             this.checkEnemiesCollision(); //TODO uncoment after testing

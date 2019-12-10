@@ -108,7 +108,7 @@ public class HighScoreActivity extends Activity {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        loadScore(finalImgIdx);
+                    loadScore(finalImgIdx);
                     }
                 });
 

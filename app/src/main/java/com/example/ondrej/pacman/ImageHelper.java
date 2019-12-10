@@ -27,6 +27,9 @@ public class ImageHelper {
     private static Bitmap enemyYellow;
     private static Bitmap enemyPurple;
 
+    private static Bitmap playButton;
+    private static Bitmap pauseButton;
+
     private static int lastTileSize;
 
     public static void initSharedImages(Resources resources) {
@@ -44,6 +47,9 @@ public class ImageHelper {
         Matrix matrixUp = new Matrix();
         matrixUp.postRotate(270);
         arrowUp = Bitmap.createBitmap(arrowRight, 0, 0, arrowRight.getWidth(), arrowRight.getHeight(), matrixUp, true);
+
+        playButton = BitmapFactory.decodeResource(resources, R.drawable.play_button);
+        pauseButton = BitmapFactory.decodeResource(resources, R.drawable.pause_button);
     }
 
     public static void initLevelImages(Resources resources) {
@@ -149,5 +155,13 @@ public class ImageHelper {
 
     public static Bitmap getEnemyPurple() {
         return enemyPurple;
+    }
+
+    public static Bitmap getPlayButton() {
+        return playButton;
+    }
+
+    public static Bitmap getPauseButton() {
+        return pauseButton;
     }
 }

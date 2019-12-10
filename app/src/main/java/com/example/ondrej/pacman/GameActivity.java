@@ -24,6 +24,10 @@ public class GameActivity extends Activity {
     private GameScreen gameScreen;
     private GestureDetector gestureDetector;
 
+    private ImageView playIcon;
+    private ImageView pauseIcon;
+    private LinearLayout layoutWithPlayPauseButtons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -39,11 +43,51 @@ public class GameActivity extends Activity {
         gameScreen = new GameScreen(this, levelId);
         canvasLayout.addView(gameScreen);
 
+        playIcon = new ImageView(getApplicationContext());
+        pauseIcon = new ImageView(getApplicationContext());
+        layoutWithPlayPauseButtons = (LinearLayout) findViewById(R.id.layout_play_pause);
+
+        this.initPlayPauseIcons();
         this.initControl();
     }
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if (hasFocus) gameScreen.run();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        pauseGame();
+    }
+
+    private void initPlayPauseIcons() {
+        playIcon.setImageBitmap(ImageHelper.getPlayButton());
+        pauseIcon.setImageBitmap(ImageHelper.getPauseButton());
+
+        playIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unPauseGame();
+            }
+        });
+
+        pauseIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pauseGame();
+            }
+        });
+
+        layoutWithPlayPauseButtons.addView(pauseIcon);
+    }
+
+    private void pauseGame() {
+        gameScreen.setPaused();
+        layoutWithPlayPauseButtons.removeAllViews();
+        layoutWithPlayPauseButtons.addView(playIcon);
+    }
+
+    private void unPauseGame() {
+        gameScreen.setPlay();
+        layoutWithPlayPauseButtons.removeAllViews();
+        layoutWithPlayPauseButtons.addView(pauseIcon);
     }
 
     private void initGestureControl(final GameScreen gameScreen) {

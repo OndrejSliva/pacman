@@ -14,22 +14,32 @@ public class GameScreen extends SurfaceView {
     private SoundAgent soundAgent;
     private int levelId;
 
+    private boolean isInitialized = false;
+
     public GameScreen(Context context, int levelId) {
         super(context);
         this.levelId = levelId;
         this.context = context;
         setFocusable(false);
-    }
-
-    public void run() {
 
         soundAgent = new SoundAgent(context);
         level = new Level(context, soundAgent, levelId);
         mainThread = new MainThread(getHolder(), this);
+        this.initSoundsEvents();
         soundAgent.playBeginMusic();
         mainThread.setRunning(true);
         mainThread.start();
+    }
 
+    public void setPaused() {
+        this.level.setPaused();
+    }
+
+    public void setPlay() {
+        this.level.setPlay();
+    }
+
+    private void initSoundsEvents() {
         MediaPlayer mediaPlayer = soundAgent.getMediaPlayerForBeginMusic();
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -44,6 +54,7 @@ public class GameScreen extends SurfaceView {
                 level.checkEndGame();
             }
         });
+
     }
 
     public void update() {
