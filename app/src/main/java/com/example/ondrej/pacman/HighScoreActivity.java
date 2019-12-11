@@ -134,6 +134,7 @@ public class HighScoreActivity extends Activity {
     private void loadScore(int levelId) {
         ListView listView = (ListView) findViewById(R.id.high_scores_list);
         ArrayList<HighScore> highScores = databaseHelper.getScoresByLevelId(levelId);
+        if (highScores.isEmpty()) highScores.add(new HighScore("empty", 0, 0));
         HighScoreAdapter highScoreAdapter = new HighScoreAdapter(HighScoreActivity.this, highScores);
         listView.setAdapter(highScoreAdapter);
     }

@@ -41,8 +41,6 @@ public class WriteNameActivity extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
-            //Intent intent = new Intent(getApplicationContext(), HighScoreActivity.class);
-            //startActivity(intent);
             Toast.makeText(getApplicationContext(), "Musíte vyplnit jméno", Toast.LENGTH_SHORT).show();
             return true;
         }

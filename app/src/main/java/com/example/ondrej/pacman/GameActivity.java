@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 public class GameActivity extends Activity {
 
@@ -88,6 +90,16 @@ public class GameActivity extends Activity {
         gameScreen.setPlay();
         layoutWithPlayPauseButtons.removeAllViews();
         layoutWithPlayPauseButtons.addView(pauseIcon);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
+            pauseGame();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     private void initGestureControl(final GameScreen gameScreen) {
