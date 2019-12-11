@@ -197,6 +197,9 @@ public class Level {
         this.drawScore(canvas);
         this.drawLives(canvas);
 
+        if (this.paused) {
+            drawPauseSceen(canvas);
+        }
     }
 
     public void update() {
@@ -215,6 +218,39 @@ public class Level {
                 this.resetToBasePosition();
             }
         }
+    }
+
+    private void drawPauseSceen(Canvas canvas) {
+        Paint bluePaint = new Paint();
+        bluePaint.setColor(Color.BLUE);
+        Paint blackPaint = new Paint();
+        blackPaint.setColor(Color.BLACK);
+        Paint yellowPaint = new Paint();
+        yellowPaint.setColor(Color.YELLOW);
+
+        canvas.drawRect(canvas.getWidth() / 8, canvas.getHeight() / 4, (canvas.getWidth() / 8) * 7, (canvas.getHeight() / 4) * 3, bluePaint);
+        canvas.drawRect((canvas.getWidth() / 32) * 5, (canvas.getHeight() / 32) * 10, (canvas.getWidth() / 32) * 27, (canvas.getHeight() / 32) * 22, blackPaint);
+
+        setTextSizeForWidth(yellowPaint, (canvas.getWidth() / 32) * 26 - (canvas.getWidth() / 32) * 6 , "Game is paused");
+        canvas.drawText("Game is paused",(canvas.getWidth() / 32) * 6,  (canvas.getHeight() / 32) * 15, yellowPaint);
+
+        setTextSizeForWidth(yellowPaint, (canvas.getWidth() / 32) * 26 - (canvas.getWidth() / 32) * 6 , "press play to continue");
+        canvas.drawText("press play to continue",(canvas.getWidth() / 32) * 6,  (canvas.getHeight() / 32) * 18, yellowPaint);
+    }
+
+    private static void setTextSizeForWidth(Paint paint, float desiredWidth, String text) {
+        final float testTextSize = 48f;
+
+        // Get the bounds of the text, using our testTextSize.
+        paint.setTextSize(testTextSize);
+        Rect bounds = new Rect();
+        paint.getTextBounds(text, 0, text.length(), bounds);
+
+        // Calculate the desired size as a proportion of our testTextSize.
+        float desiredTextSize = testTextSize * desiredWidth / bounds.width();
+
+        // Set the paint for that size.
+        paint.setTextSize(desiredTextSize);
     }
 
     private void drawLives(Canvas canvas) {
